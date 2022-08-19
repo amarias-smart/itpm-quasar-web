@@ -1,18 +1,24 @@
 <template>
   <div class="row q-col-gutter-md">
-    <div class="col">
-      <DXPIE title="TOTAL"
-             :data="completedData" />
+    <div class="col-12 col-sm-4">
+      <DXPIE
+        title="TOTAL"
+        :data="completedData"
+      />
     </div>
 
-    <div class="col">
-      <DXPIE title="ONGOING"
-             :data="ongoingData" />
+    <div class="col-12 col-sm-4">
+      <DXPIE
+        title="ONGOING"
+        :data="ongoingData"
+      />
     </div>
 
-    <div class="col">
-      <DXPIE title="OTHERS"
-             :data="othersData" />
+    <div class="col-12 col-sm-4">
+      <DXPIE
+        title="OTHERS"
+        :data="othersData"
+      />
     </div>
   </div>
 </template>

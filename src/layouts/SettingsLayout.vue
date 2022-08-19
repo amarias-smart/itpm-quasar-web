@@ -1,105 +1,68 @@
 <template>
-  <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
-
-    <!-- (Optional) The Header -->
-    <q-header elevated>
+  <q-layout view="hHh lpR ffr">
+    <q-header
+      bordered
+      class="bg-green"
+    >
       <q-toolbar>
         <q-btn
           flat
-          round
           dense
+          round
           icon="menu"
-          @click="toggleLeftDrawer"
+          aria-label="Menu"
+          @click="layoutStore.toggleOpen"
         />
 
         <q-toolbar-title>
-          Header
+          ITPM TRACKER
         </q-toolbar-title>
-      </q-toolbar>
 
-      <q-tabs>
-        <q-route-tab
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
+        <h6 class="text-weight-light q-my-none text-uppercase">{{ userProfile }}</h6>
+
+        <q-separator
+          vertical
+          dark
+          class="q-mx-md"
         />
-        <q-route-tab
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        />
-      </q-tabs>
+
+        <USEROPTS class="q-mr-xs" />
+
+        <NOTIFLIST class="q-mr-xs" />
+
+        <MENUOPTS />
+      </q-toolbar>
     </q-header>
 
-    <!-- (Optional) The Footer -->
-    <q-footer>
-      <q-tabs switch-indicator>
-        <q-route-tab
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
-        />
-        <q-route-tab
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        />
-      </q-tabs>
-
-      <q-toolbar>
-        <q-btn
-          flat
-          round
-          dense
-          icon="menu"
-          @click="toggleLeftDrawer"
-        />
-        <q-toolbar-title>
-          Footer
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-
-    <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
     <q-drawer
-      v-model="leftDrawerOpen"
-      side="left"
       bordered
-      class="bg-grey-2"
+      overlay
+      behavior="mobile"
+      v-model="layoutStore.openDrawer"
     >
-      <!-- QScrollArea is optional -->
-      <q-scroll-area class="fit q-pa-sm">
-        <!-- Content here -->
-      </q-scroll-area>
+      <DRAWERCONTENT />
     </q-drawer>
 
-    <q-page-container>
-      <!-- This is where pages get injected -->
-      <router-view />
+    <q-page-container class="bg-green-2">
+      <suspense>
+        <router-view />
+      </suspense>
     </q-page-container>
-
   </q-layout>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script setup>
+import 'devextreme/dist/css/dx.light.css'
+import { defineAsyncComponent } from 'vue'
+import { useLayoutStore } from 'stores/layout'
+import { useUserDataStore } from 'stores/userData'
 
-export default {
-  // name: 'LayoutName',
+const DRAWERCONTENT = defineAsyncComponent(() => import('components/layout/drawerContent.vue'))
+const USEROPTS = defineAsyncComponent(() => import('components/layout/userOpts.vue'))
+const NOTIFLIST = defineAsyncComponent(() => import('components/layout/notifsList.vue'))
+const MENUOPTS = defineAsyncComponent(() => import('components/layout/menuOpts.vue'))
 
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-}
+const layoutStore = useLayoutStore()
+const userDataStore = useUserDataStore()
+const userProfile = userDataStore.userData.profile
 </script>

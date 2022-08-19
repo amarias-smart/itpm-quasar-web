@@ -23,17 +23,18 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, watch, ref } from 'vue'
 import {
   DxPivotGrid,
   DxFieldChooser,
   DxExport
-} from 'devextreme-vue/pivot-grid'
+} from 'devextreme-vue/ui/pivot-grid'
 import { exportDataGrid } from 'devextreme/excel_exporter'
 import { Workbook } from 'exceljs'
 import saveAs from 'file-saver'
 
 const props = defineProps(['data', 'title'])
+const dataSource = ref([])
 
 const onExporting = (e) => {
   const title = props.title || 'ITPM Data'
@@ -51,4 +52,8 @@ const onExporting = (e) => {
   })
   e.cancel = true
 }
+
+watch(() => props.data, (val) => {
+  dataSource.value = val
+})
 </script>

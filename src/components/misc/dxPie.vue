@@ -37,13 +37,14 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import DxPieChart, {
+import {
+  DxPieChart,
   DxSeries,
   DxLabel,
   DxConnector,
   DxLegend,
   DxFont
-} from 'devextreme-vue/pie-chart'
+} from 'devextreme-vue/ui/pie-chart'
 
 defineProps(['data', 'title'])
 

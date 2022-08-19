@@ -1,76 +1,114 @@
 <template>
-  <DxDataGrid :data-source="data"
-              column-resizing-mode="widget"
-              :show-borders="true"
-              :show-row-lines="true"
-              :allow-column-resizing="true"
-              :allow-column-reordering="true"
-              :column-auto-width="true"
-              :column-min-width="100"
-              @exporting="onExporting">
-    <DxColumnChooser :enabled="allowColumnChooser"
-                     mode="select" />
-    <DxSearchPanel :visible="allowSearchPanel"
-                   :width="240"
-                   placeholder="Search..." />
-    <DxPaging :page-size="10" />
-    <DxPager :allowed-page-sizes="pageSizes"
-             :show-page-size-selector="true"
-             :show-navigation-buttons="true"
-             :show-info="true" />
-    <DxHeaderFilter :visible="allowHeaderFilter" />
-    <DxExport :enabled="allowExport" />
-    <DxColumnFixing :enabled="true" />
-    <DxGrouping :auto-expand-all="false" />
+  <q-card>
+    <q-card-section>
+      <DxDataGrid
+        :data-source="data"
+        column-resizing-mode="widget"
+        :show-borders="true"
+        :show-row-lines="true"
+        :allow-column-resizing="true"
+        :allow-column-reordering="true"
+        :column-auto-width="true"
+        :column-min-width="100"
+        @exporting="onExporting"
+      >
+        <DxColumnChooser
+          :enabled="allowColumnChooser"
+          mode="select"
+        />
 
-    <DxColumn v-for="(col, i) in columns"
-              :key="i"
-              :data-field="col"
-              :group-index="allowStatusGrouping ? groupingIndex(col) : null"
-              :format="col === 'wave %' || col === 'demand %' ? `#0.#'%'` : null"
-              css-class="maxed-width" />
+        <DxSearchPanel
+          :visible="allowSearchPanel"
+          :width="240"
+          placeholder="Search..."
+        />
 
-    <DxSummary v-if="allowSummary">
-      <DxGroupItem :show-in-group-footer="false"
-                   :align-by-column="true"
-                   column="wave number"
-                   summary-type="sum" />
+        <DxPaging :page-size="10" />
 
-      <DxGroupItem :show-in-group-footer="false"
-                   :align-by-column="true"
-                   column="wave %"
-                   summary-type="avg"
-                   :value-format="formatDecimal" />
+        <DxPager
+          :allowed-page-sizes="pageSizes"
+          :show-page-size-selector="true"
+          :show-navigation-buttons="true"
+          :show-info="true"
+        />
 
-      <DxGroupItem :show-in-group-footer="false"
-                   :align-by-column="true"
-                   column="demand number"
-                   summary-type="sum" />
+        <DxHeaderFilter :visible="allowHeaderFilter" />
 
-      <DxGroupItem :show-in-group-footer="false"
-                   :align-by-column="true"
-                   column="demand %"
-                   summary-type="avg"
-                   :value-format="formatDecimal" />
+        <DxExport :enabled="allowExport" />
 
-      <DxTotalItem column="wave number"
-                   summary-type="sum" />
+        <DxColumnFixing :enabled="true" />
 
-      <DxTotalItem column="wave %"
-                   summary-type="avg"
-                   :value-format="formatDecimal" />
+        <DxGrouping :auto-expand-all="false" />
 
-      <DxTotalItem column="demand number"
-                   summary-type="sum" />
+        <DxColumn
+          v-for="(col, i) in columns"
+          :key="i"
+          :data-field="col"
+          :group-index="allowStatusGrouping ? groupingIndex(col) : null"
+          :format="col === 'wave %' || col === 'demand %' ? `#0.#'%'` : null"
+          css-class="maxed-width"
+        />
 
-      <DxTotalItem column="demand %"
-                   summary-type="avg"
-                   :value-format="formatDecimal" />
-    </DxSummary>
-  </DxDataGrid>
+        <DxSummary v-if="allowSummary">
+          <DxGroupItem
+            :show-in-group-footer="false"
+            :align-by-column="true"
+            column="wave number"
+            summary-type="sum"
+          />
+
+          <DxGroupItem
+            :show-in-group-footer="false"
+            :align-by-column="true"
+            column="wave %"
+            summary-type="avg"
+            :value-format="formatDecimal"
+          />
+
+          <DxGroupItem
+            :show-in-group-footer="false"
+            :align-by-column="true"
+            column="demand number"
+            summary-type="sum"
+          />
+
+          <DxGroupItem
+            :show-in-group-footer="false"
+            :align-by-column="true"
+            column="demand %"
+            summary-type="avg"
+            :value-format="formatDecimal"
+          />
+
+          <DxTotalItem
+            column="wave number"
+            summary-type="sum"
+          />
+
+          <DxTotalItem
+            column="wave %"
+            summary-type="avg"
+            :value-format="formatDecimal"
+          />
+
+          <DxTotalItem
+            column="demand number"
+            summary-type="sum"
+          />
+
+          <DxTotalItem
+            column="demand %"
+            summary-type="avg"
+            :value-format="formatDecimal"
+          />
+        </DxSummary>
+      </DxDataGrid>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup>
+import { defineProps } from 'vue'
 import {
   DxDataGrid,
   DxPaging,
@@ -85,7 +123,7 @@ import {
   DxSummary,
   DxTotalItem,
   DxGroupItem
-} from 'devextreme-vue/data-grid'
+} from 'devextreme-vue/ui/data-grid'
 import { exportDataGrid } from 'devextreme/excel_exporter'
 import { Workbook } from 'exceljs'
 import saveAs from 'file-saver'
@@ -96,7 +134,6 @@ const props = defineProps([
   'title',
   'allowExport',
   'allowHeaderFilter',
-  'allowFilterRow',
   'allowColumnChooser',
   'allowSearchPanel',
   'allowSummary',
@@ -105,7 +142,7 @@ const props = defineProps([
 const pageSizes = [5, 10, 25, 'all']
 
 const onExporting = (e) => {
-  const title = props.title || 'ITPM Data'
+  const title = props.title
   const workbook = new Workbook()
   const worksheet = workbook.addWorksheet('Main sheet')
 
